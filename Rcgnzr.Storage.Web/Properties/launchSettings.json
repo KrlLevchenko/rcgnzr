@@ -1,0 +1,11 @@
+﻿{  
+  "profiles": { 
+    "Storage": {
+      "commandName": "Project",
+      "applicationUrl": "http://localhost:3000",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
