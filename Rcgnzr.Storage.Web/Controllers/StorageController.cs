@@ -1,58 +1,38 @@
 ﻿using System;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Rcgnzr.Storage.Web.Controllers
 {
     [Route("api/[controller]")]
-    public class StorageController
+    public class StorageController: Controller
     {
-        /// <summary>
-        ///     Получает все контейнеры.
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("")]
-        public IActionResult GetAll() => throw new NotImplementedException();
+        private readonly IMediator _mediator;
 
-        /// <summary>
-        ///     Получает все файлы в конкретном контейнере.
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("{id}")]
-        public IActionResult GetFiles(string id) => throw new NotImplementedException();
+        public StorageController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
         
         /// <summary>
         ///     Получает содержимое конкретного файла
         /// </summary>
         /// <returns></returns>
         [HttpGet("{containerId}/{fileId}")]
-        public IActionResult GetFile(string containerId, string fileId) => throw new NotImplementedException();
-        
-        /// <summary>
-        ///    Создаёт контейнер.
-        /// </summary>
-        /// <returns></returns>
-        [HttpPost("{id}")]
-        public IActionResult CreateContainer(string id) => throw new NotImplementedException();
+        public Task<Stream> GetFile(Handlers.GetFile.Request request, CancellationToken ct) => _mediator.Send(request, ct);
         
         /// <summary>
         ///     Создаёт файл
         /// </summary>
         /// <returns></returns>
         [HttpPost("{containerId}/{fileId}")]
-        public IActionResult CreateFile(string containerId, string fileId) => throw new NotImplementedException();
-        
-        /// <summary>
-        ///    Удаляет контейнер.
-        /// </summary>
-        /// <returns></returns>
-        [HttpDelete("{id}")]
-        public IActionResult DeleteContainer(string id) => throw new NotImplementedException();
-        
-        /// <summary>
-        ///     Удаляет файл.
-        /// </summary>
-        /// <returns></returns>
-        [HttpDelete("{containerId}/{fileId}")]
-        public IActionResult DeleteFile(string containerId, string fileId) => throw new NotImplementedException();
+        public Task<Unit> SaveFile(Handlers.SaveFile.Request request)
+        {
+            request.Body = Request.Body;
+            return _mediator.Send(request);
+        }
     }
 }

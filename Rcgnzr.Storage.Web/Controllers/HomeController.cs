@@ -10,7 +10,7 @@ namespace Rcgnzr.Storage.Web.Controllers
             return Ok(new
             {
                 version,
-                api = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/help"
+                api = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/swagger"
             });
         }
     }
