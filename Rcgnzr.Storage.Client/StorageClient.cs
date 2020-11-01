@@ -19,13 +19,6 @@ namespace Rcgnzr.Storage.Client
         {
             var url = $"/api/storage/{containerId}/{fileId}";
             var result = await _client.GetAsync(url, ct);
-            try
-            {
-
-            }
-            catch (Exception e)
-            {
-            }
             result.EnsureSuccessStatusCode();
             var stream = await result.Content.ReadAsStreamAsync();
             return stream;
