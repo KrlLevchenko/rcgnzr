@@ -1,12 +1,10 @@
-using System;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Rcgnzr.Storage.Client;
 
 namespace Rcgnzr.Cabinet.Web
 {
@@ -27,10 +25,7 @@ namespace Rcgnzr.Cabinet.Web
             
             services.AddMediatR(typeof(Startup).Assembly);
             
-            services.AddHttpClient<IStorageClient, StorageClient>(client =>
-            {
-                client.BaseAddress = new Uri(_configuration.GetConnectionString("Storage"));
-            });
+            services.AddSpaStaticFiles(configuration => { configuration.RootPath = "client/public"; });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,7 +37,18 @@ namespace Rcgnzr.Cabinet.Web
             if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
 
             app.UseRouting();
+            app.UseSpaStaticFiles();
+            
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "client";
 
+                if (env.IsDevelopment())
+                {
+                    spa.UseReactDevelopmentServer("start");
+                }
+            });
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
