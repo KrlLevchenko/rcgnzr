@@ -1,0 +1,11 @@
+﻿{
+  "profiles": {
+    "Rcgnzr.Cabinet.Web": {
+      "commandName": "Project",
+      "applicationUrl": "http://localhost:3100",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
