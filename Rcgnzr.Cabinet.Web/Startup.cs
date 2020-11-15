@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Rcgnzr.Cabinet.Model;
 
 namespace Rcgnzr.Cabinet.Web
 {
@@ -24,6 +25,7 @@ namespace Rcgnzr.Cabinet.Web
             services.AddSwaggerGen();
             
             services.AddMediatR(typeof(Startup).Assembly);
+            services.AddScoped(x => new Context(_configuration.GetConnectionString("Database")));
             
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "client/public"; });
         }
@@ -39,6 +41,13 @@ namespace Rcgnzr.Cabinet.Web
             app.UseRouting();
             app.UseSpaStaticFiles();
             
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    "default",
+                    "{controller=Home}/{action=Index}/{id?}");
+            });
+            
             app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = "client";
@@ -49,12 +58,7 @@ namespace Rcgnzr.Cabinet.Web
                 }
             });
             
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    "default",
-                    "{controller=Home}/{action=Index}/{id?}");
-            });
+            
         }
     }
 }
